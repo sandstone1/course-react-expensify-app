@@ -70,7 +70,9 @@ store.subscribe( () => {
 // is in the staging area and ready for a commit and we will type:
 // git commit -m " Remove dummy expense data "
 
-//
+// ------------
+
+
 
 /*
 // lecture 99: Challange
