@@ -1,0 +1,25 @@
+
+// set the html font-size to 62.5% so now 1 rem is equal to 10 px
+// and this makes it a lot easier to work with rem
+html {
+    font-size : 62.5%;
+}
+
+body {
+    font-size   : $m-size;
+    font-family : Helvetica, Arial, sans-serif;
+
+    background : hsla(0, 100%, 100%, 1); // rgba(255, 255, 255, 1)
+}
+
+button {
+    cursor : pointer;
+}
+
+button:disabled {
+    cursor : default; 
+}
+
+.is-active {
+    font-weight : 700;
+}
