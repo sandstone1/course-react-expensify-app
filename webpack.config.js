@@ -214,7 +214,7 @@ module.exports = ( env ) => {
         // set up the webpack dev server
         devServer : {
             // the instructor wanted to use the contentBase property
-            // need to set contentBase equal to the absolte path to those public assets
+            // need to set contentBase equal to the absolute path to those public assets
             // and we did that above under the output.path value or
             // path.join( __dirname, 'public' ) and this gives us the absolute path to the public folder
             contentBase         : path.join( __dirname, 'public' ),
