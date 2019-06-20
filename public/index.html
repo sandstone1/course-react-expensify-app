@@ -8,17 +8,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- favicon link information -->
-    <link rel="icon" type="image/png" href="./images/favicon.png">
+    <!-- can be either ./ or just / -->
+    <!-- Mark 1 -->
+    <!-- the goal is to have everything in a dist directory -->
+    <link rel="icon" type="image/png" href="/images/favicon.png">
 
     <title>Expensify</title>
+
     <!-- link to our styles file -->
     <!-- can be either ./ or just / -->
-    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <!-- Mark 1 -->
+    <link rel="stylesheet" type="text/css" href="/dist/styles.css">
 </head>
 <body>
     <div id="app"></div>
-    <!-- can be either ./ or just / -->
-    <script src="/bundle.js"></script>
+    <!-- /dist just means the dist folder is in the root web directory
+    or the same directory as index.html -->
+    <!-- Mark 1 -->
+    <!-- the goal is to have everything in a dist directory so change
+    src="/bundle.js" to this src="/dist/bundle.js" -->
+    <script src="/dist/bundle.js"></script>
 </body>
 
 </html>

@@ -89,7 +89,13 @@ module.exports = ( env ) => {
             // and to do this we will create a const called path and access the module code by using a method called require()
             // and then we will load in a module called path and now we have access to path.join and can use that method
             // to join our absolute path with the local path to the public folder and the combined path will be the path we want
-            path : path.join( __dirname, 'public' ),
+
+            // -- Mark 3 --
+            // we need to change path from " path : path.join( __dirname, 'public' ), " to
+            // " path : path.join( __dirname, 'public', 'dist' ), " so we are adding on a third argument and webpack will 
+            // create the dist folder as it adds assets to that folder 
+            path : path.join( __dirname, 'public', 'dist' ),
+            // ------------
             // filename can be called anything but usually the filename is called bundle.js
             filename : 'bundle.js'
         },
@@ -211,6 +217,17 @@ module.exports = ( env ) => {
         // and dump these files into an external file and this will be topic of the next video
         devtool : isProduction ? 'source-map' : 'inline-source-map',
         // -----------
+
+        // -- Mark 3 --
+        // we also need to make a change to the devServer
+        // remember, that the dev server never writes assets to the file system it serves the files up
+        // virtually and allows the dev server to be snappy and quick and we need to customize the object
+        // below because right now the dev server is looking for those assets in the root of the public
+        // folder and they are no londer in the root of the public folder so we need to add on
+        // " publicPath : '/dist/' " and this will make sure that the dev server looks for those assets
+        // in the dist folder
+        // -----------
+
         // set up the webpack dev server
         devServer : {
             // the instructor wanted to use the contentBase property
@@ -227,7 +244,8 @@ module.exports = ( env ) => {
             // to do this, we need to add a new attribute onto the dev server object
             // " historyApiFallback : true " and this tells the dev server that we are going to be
             // handling routing via our client side code and that it should return index.hmtl for all routes
-            historyApiFallback : true
+            historyApiFallback : true,
+            publicPath : '/dist/'
         }
     };
 };
