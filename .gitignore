@@ -1,2 +1,6 @@
 node_modules/
 src/playground/app.js
+public/bundle.js
+public/bundle.js.map
+public/styles.css
+public/style.css.map
