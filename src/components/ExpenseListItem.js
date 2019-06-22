@@ -27,6 +27,13 @@ import React from 'react';
 import {          Link } from 'react-router-dom';
 // -----------
 
+// -- Mark 5 --
+import moment from 'moment';
+import numeral from 'numeral';
+// ------------
+
+
+
 // we will implicitly return some jsx
 // we are going to destructure the props object or props.expense and get the individual
 // values off of it
@@ -72,11 +79,56 @@ const ExpenseListItem = ( { dispatch, id, description, amount, createdAt } ) => 
     // related imports above and the connect function below since we no longer need the connect
     // function
     // -----------
+
+    // -- Mark 5 --
+    // lecture 138: New Feature Workflow
+    // move amount and createdAt onto their own lines
+    // first, we're going to focus on formatting createdAt with moment and need to import moment
+    // above and below we need to change { createdAt } to { moment(createdAt).format( 'MMMM Do, YYYY' ) }
+    // and this will create a moment instance with our timestamp as the argument and then we add
+    // in the format method with the follwoing string: 'MMMM Do, YYYY'
+
+    // next up, we need to format amount and were going to be using a library that will make it really
+    // easy to format currency and the library's name is numeral.js and we find information on this
+    // library at numeraljs.com and the website says that Numeral.js is a " A javascript library for
+    // formatting and manipulating numbers. " so below we will need to change { amount } to
+    // { numeral( amount / 100 ).format( '$0,0.00' ) } and we had to devide amount by 100 to convert
+    // cents to dollars
+    // and we will call numeral and pass out amount in as the argument which will give us our numeral
+    // instance and then we will call the format method with the pattern we want to use
+
+    // now go to the expensify site and make sure the amount and time are showing correctly and
+    // now that everything is working correctly, we can shut down the dev-server and make a commit
+    // but first run 
+    
+    // " git status "
+    
+    // to get an overview of what we've changed and then we can make
+    // the commit by typing:
+    
+    // " git commit -a -m "Set up formatting for amount and createdAt" "
+    
+    // and can go straight to making a commit since we only have files with modified changed and no
+    // untracked files and then we can push our changes to github by typing:
+
+    // " git push "
+
+    // and once our changes are in our github remote repository then we can push our changes to Heroku
+    // and deploy our code on the web and do this we type:
+
+    // " git push heroku master "
+
+    // and once the code is up on the Heroku servers Heroku will incorporate our latest changes and
+    // redeploy the application
     <div>
         <Link to={ `/edit/${ id }` }>
             <h3>{ description }</h3>
         </Link>
-        <p>{ amount } - { createdAt }</p>
+        <p>
+            { numeral( amount / 100 ).format( '$0,0.00' ) }
+            -
+            { moment(createdAt).format( 'MMMM Do, YYYY' ) }
+        </p>
     </div>
     // -----------
 );
