@@ -25,12 +25,12 @@ import moment from 'moment';
 // for the default export, as the first line below, we could do:
 // " const getVisibleExpenses = ( expenses, { text, sortBy, startDate, endDate } ) => { "
 // and then " export default getVisibleExpenses; "
-// or we do
+// or we could do
 // " export default ( expenses, { text, sortBy, startDate, endDate } ) => { "
 
 // change filters to text, sortBy, startDate, endDate
 export default ( expenses, { text, sortBy, startDate, endDate } ) => {
-    // use filter to 
+    // use filter to
     // filter creates a brand new array from another array and does this by looking at
     // each item in the array and will call a function once for each item in the array
     // and the function will return true or false
@@ -49,7 +49,7 @@ export default ( expenses, { text, sortBy, startDate, endDate } ) => {
     
         // -- Mark 1 --
         // lecture 110: Filtering by Dates
-        // first, we need to figure how to make the comparisons below using momnent
+        // first, we need to figure how to make the comparisons below using moment
         // and to do this we are going to be using the Query methods from moment
         // comment out the following startDateMatch and endDateMatch
         // const startDateMatch = typeof startDate !== 'number' || expense.createdAt >= startDate;

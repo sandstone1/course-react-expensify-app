@@ -5,8 +5,13 @@ import React from 'react';
 import moment from 'moment';
 // import the named export from the react-dates library
 import { SingleDatePicker } from 'react-dates';
+// --Mark 7 --
+// lecture 121: Mocking Libraries with Jest
+// move the _datepicker.css file into our app.js file and will comment this import out in this file
+// and we will come back to our css a little later
 // import the css for the react-dates library
-import 'react-dates/lib/css/_datepicker.css';
+// import 'react-dates/lib/css/_datepicker.css';
+// -- END OF MARK 7 --
 
 
 // let's play around with moment
@@ -118,7 +123,7 @@ export default class ExpenseForm extends React.Component {
             createdAt : props.expense ? moment( props.expense.createdAt ) : moment(),
 
             // start focused off as not focused so set focused equal to false
-            calenderFocused : false,
+            calendarFocused : false,
 
             // error
             error : ''
@@ -249,7 +254,7 @@ export default class ExpenseForm extends React.Component {
     // so we can use it as follows and " focused " below represents true or false
     onFocusChange = ( { focused } ) => {
         // all we have to do inside the arrow function is use this.setState() and set the state
-        // for calenderFocused
+        // for calendarFocused
 
         // we do not need the previous state argument for this function
         // call this.setState and pass in the updater function
@@ -258,7 +263,7 @@ export default class ExpenseForm extends React.Component {
         this.setState( () => ( {
             // we are going to set calenderFocused equal to whatever value came back from
             // " focused "
-            calenderFocused : focused
+            calendarFocused : focused
         } ) );
     };
 
@@ -353,7 +358,7 @@ export default class ExpenseForm extends React.Component {
                     <SingleDatePicker
                         date          ={ this.state.createdAt }
                         onDateChange  ={ this.onDateChange }
-                        focused       ={ this.state.calenderFocused }
+                        focused       ={ this.state.calendarFocused }
                         onFocusChange ={ this.onFocusChange }
                         numberOfMonths={ 1 }
                         isOutsideRange={ () => false }

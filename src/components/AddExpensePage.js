@@ -79,17 +79,65 @@ import { addExpense } from '../actions/expenses';
 
 // -------------
 
+// -- Mark 7 --
+// new class based component
+// see below for details
+// we switched to a class based component since we no longer want to define the onSubmit
+// function inline
+export class AddExpensePage extends React.Component {
+    // set onSubmit to equal an arrow function and change
+    // props to this.props
+    onSubmit = ( expense ) => {
+        // -- Mark 6 --
+        // see below for details
+        // props.dispatch( addExpense( expense ) );
+
+        // -- Mark 8 --
+        // lecture 125: Testing EditExpensePage
+        // need to change the " onSubmit " property below to " addExpense "
+        // GO TO -- Mark 3 -- in AddExpensePage.test.js
+        this.props.addExpense( expense );
+        this.props.history.push( '/' );
+        // END OF -- Mark 8 --
+    }
+    // now all we need to do is define render and we return everything in the old component
+    // starting at <div></div> and change onSubmit to " onSubmit={ this.onSubmit } " and the last
+    // thing we need to do is test the unconnected version of the AddExpensePage component
+    // so we will change " class AddExpensePage extends React.Component { " to
+    // " export class AddExpensePage extends React.Component { " and now we have the unconnected
+    // version above that we can test and we have the connected version below for our real app
+    render() {
+        return (
+            <div>
+                <h1>Add Expense</h1>
+                <ExpenseForm
+                    onSubmit={ this.onSubmit }
+                />
+            </div>
+        );
+    }
+}
+
+// -- END OF MARK 7 --
+
+
+// old stateless functional component
+/*
 const AddExpensePage = ( props ) => (
     <div>
         <h1>Add Expense</h1>
         <ExpenseForm
             onSubmit={ ( expense ) => {
-                props.dispatch( addExpense( expense ) );
+                // -- Mark 6 --
+                // see below for details
+                // props.dispatch( addExpense( expense ) );
+                props.onSubmit( expense );
                 props.history.push( '/' );
             } }
         />
     </div>
 );
+*/
 
 // way #2 - longhand version
 /*
@@ -107,4 +155,46 @@ const ExpenseDashBoardPage = () => {
 // and now that we connected the AddExpensePage component to the store we have
 // access to props.dispatch so above we need to add the props object as the
 // argument to the AddExpensePage component above
-export default connect()( AddExpensePage );
+// export default connect()( AddExpensePage );
+
+
+// -- Mark 6 --
+// lecture 124: Testing AddExpense Page
+// comment out the Mark 5 export default and use the one below
+// set up mapDispatchToProps and mapDispatchToProps is pretty similar to mapStateToProps
+// but instead of working with the state it is working with dispatch and mapDispatchToProps
+// gets called with dispatch as the argument so we access to use dispatch inside the function
+// and the goal is return an object and on here we define various props and these props are
+// going to call dispatch so at the end of the day we will be able to extract away
+// " props.dispatch( addExpense( expense ) ); " from the AddExpensePage component and will
+// replace it with " props.onSubmit( expense ) " and this will be much easier to test and to
+// get " props.onSubmit( expense ) " to work we have to set up onSubmit down below and we will
+// take expense in as an argument and then we will pass it through to 
+// " dispatch( addExpense( expense ) ) " so now we have the exact same functionality but now
+// we have a component that is more testable than ever and now we need to pass mapDispatchToProps
+// in as the second argument to connect() below and mapDispatchToProps is a way to return your
+// dispatch functions and abstract them away from the component itself and now let's convert
+// our stateless function component above to a class based component and go to
+// -- Mark 7 -- above
+
+// -- Mark 8 --
+// lecture 125: Testing EditExpensePage
+// need to change the " onSubmit " property below to " addExpense " or we need to set the
+// property equal to the name of the action generator or addExpense
+const mapDispatchToProps = ( dispatch ) => ( {
+    addExpense : ( expense ) => dispatch( addExpense( expense ) )
+} );
+// END OF -- Mark 8 --
+
+// way #2 - longhand version
+/*
+const mapDispatchToProps = ( dispatch ) => {
+    return {
+        onSubmit : ( expense ) => dispatch( addExpense( expense ) )
+    };
+};
+*/
+
+export default connect( undefined, mapDispatchToProps )( AddExpensePage );
+
+// -- END OF MARK 6 --

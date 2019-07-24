@@ -32,7 +32,7 @@ export default () => {
             // the filters property is managed by the reducer or the filtersReducer
             filters : filtersReducer
         }),
-        // for redux dev tools, we need add this line of code in addition to downloading
+        // for redux dev tools, we need to add this line of code in addition to downloading
         // the Chrome redux dev tool extension
         // this line of code came from the following URL:
         // " https://github.com/zalmoxisus/redux-devtools-extension "

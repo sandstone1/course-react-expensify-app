@@ -7,8 +7,11 @@ import ExpenseList from './ExpenseList';
 
 // -- Mark 4 --
 import ExpenseListFilters from './ExpenseListFilters';
+
 // insert the ExpenseListFilters component <ExpenseListFilters /> down
 // below and make sure it is working
+
+import ExpenseSummary from './ExpenseSummary';
 
 
 // ==============================
@@ -28,6 +31,7 @@ import ExpenseListFilters from './ExpenseListFilters';
 // render the ExpenseList component below
 const ExpenseDashboardPage = () => (
     <div>
+        <ExpenseSummary />
         <ExpenseListFilters />
         <ExpenseList />
     </div>

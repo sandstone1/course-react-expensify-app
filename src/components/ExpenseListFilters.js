@@ -14,9 +14,12 @@ import { setStartDate, setEndDate } from '../actions/filters';
 // -----------
 
 
+
+
+
 // build the stateless functional component
 // implicitly return some jsx and no need to put {} in between the ()
-class ExpenseListFilters extends React.Component {
+export class ExpenseListFilters extends React.Component {
     // -- Mark 3 --
     // no need to add double quotes or "" to the value property below when
     // using jsx
@@ -85,11 +88,11 @@ class ExpenseListFilters extends React.Component {
     // were going to need to track state within this component so we will need to
     // switch ExpenseListFilters into a class based component
     // after we create the class based component, we need to set up state and we
-    // can set up state and set it equal to an object and keep track of calenderFocused
-    // and calenderFocused will be null or will be a string and we just need to keep track
-    // of calenderFocused and pass it down into the react dates component
+    // can set up state and set it equal to an object and keep track of calendarFocused
+    // and calendarFocused will be null or will be a string and we just need to keep track
+    // of calendarFocused and pass it down into the react dates component
     state = {
-        calenderFocused : null
+        calendarFocused : null
     };
 
     // this function will get called by the react-dates library
@@ -99,23 +102,37 @@ class ExpenseListFilters extends React.Component {
     onDatesChange = ( { startDate, endDate } ) => {
         // now we need to dispatch the correct actions in order to get the filters to change
         // remember, we have to import the named exports setStartDate and setEndDate
-        this.props.dispatch( setStartDate( startDate ) );
-        this.props.dispatch( setEndDate( endDate ) );
+
+        // -- Mark 7 --
+        // lecture 126: Testing ExpenseListFilters
+        // now that we have mapDispatchToProps set up below we can change
+        // " this.props.dispatch( setStartDate( startDate ) ); " to
+        // " this.props.setStartDate( startDate ); "
+        this.props.setStartDate( startDate );
+        // -- Mark 7 --
+        // lecture 126: Testing ExpenseListFilters
+        // now that we have mapDispatchToProps set up below we can change
+        // " this.props.dispatch( setEndDate( endDate ) ); " to
+        // " this.props.setEndDate( endDate ); "
+        // GO TO -- Mark 7 -- Continue below
+        this.props.setEndDate( endDate );
     };
 
-    // in the api for onFocusChange, the first argument is the focusedInput property
+    // in the api for onFocusChange, the first argument is the focusedInput property and this could
+    // be equal to null, startDate or endDate and if equal to endDate, for example, then endDate
+    // is focused
     onFocusChange = ( focusedInput ) => {
         // all we have to do inside the arrow function is use this.setState() and set the state
-        // for calenderFocused
+        // for calendarFocused
 
         // we do not need the previous state argument for this function
         // call this.setState and pass in the updater function
         // witihn an arrow function we can return an object but we have to put the object
         // in parentheses ()
         this.setState( () => ( {
-            // we are going to set calenderFocused equal to whatever value came back from
+            // we are going to set calendarFocused equal to whatever value came back from
             // " focusedInput "
-            calenderFocused : focusedInput
+            calendarFocused : focusedInput
             // ---------------
 
             // ==============================
@@ -124,35 +141,89 @@ class ExpenseListFilters extends React.Component {
         } ) );
     };
 
+    // -- Mark 6 --
+    // lecture 126: Testing ExpenseListFilters
+    // first, take the inline text onChange handler:
+    /*
+    onChange={ ( e ) => {
+      this.props.dispatch( setTextFilter( e.target.value ) );
+    } }
+    */
+    // move this into its own function below called onTextChange and then change onChange to
+    // " onChange = { this.onTextChange } "
+
+    // second, take the inline select onChange handler:
+    /*
+    onChange={ ( e ) => {
+        if ( e.target.value === 'date' ) {
+            this.props.dispatch( sortByDate() );
+        }
+        else if ( e.target.value === 'amount' ) {
+            this.props.dispatch( sortByAmount() );
+        }
+    } }
+    */
+    // and move it to its own function called onSortChange below and then change onChange to
+    // " onChange = { this.onSortChange } " and now all the inline functions have been broken
+    // out into methods and the last thing we want to do before we write any test cases is break
+    // out all those dispatch calls as well so let's go to the mapDispatchToProps function below
+    // GO TO -- Mark 6 -- Continue below
+    onTextChange = ( e ) => {
+        // -- Mark 7 --
+        // lecture 126: Testing ExpenseListFilters
+        // now that we have mapDispatchToProps set up below we can change
+        // " this.props.dispatch( setTextFilter( e.target.value ) ); " to
+        // " this.props.setTextFilter( e.target.value ); "
+        this.props.setTextFilter( e.target.value );
+    };
+
+    onSortChange = ( e ) => {
+        if ( e.target.value === 'date' ) {
+            // -- Mark 7 --
+            // lecture 126: Testing ExpenseListFilters
+            // now that we have mapDispatchToProps set up below we can change
+            // " this.props.dispatch( sortByDate() ); " to " this.props.sortByDate(); "
+            this.props.sortByDate();
+        }
+        else if ( e.target.value === 'amount' ) {
+            // -- Mark 7 --
+            // lecture 126: Testing ExpenseListFilters
+            // now that we have mapDispatchToProps set up below we can change
+            // " this.props.dispatch( sortByAmount() ); " to " this.props.sortByAmount(); "
+            this.props.sortByAmount();
+            // now we have refactored all of our code up above and the ExpenseListFilters
+            // component is ready to be completely tested and were going to knock that process
+            // out in the ExpenseListFilters.test.js file
+
+            // ==============================
+            // GO TO COMPONENTS/EXPENSELISTFILTERS.TEST.JS -- GO TO -- Mark 1 --
+            // ==============================
+
+            // END OF -- Mark 7 --
+        }
+    };
+    // END OF -- Mark 6 --
+
     render() {
         return (
             <div>
                 <input
                     type="text"
                     value={ this.props.filters.text }
-                    onChange={ ( e ) => {
-                        this.props.dispatch( setTextFilter( e.target.value ) );
-                    } } 
+                    onChange={ this.onTextChange } 
                 />
                 <select
                     value={ this.props.filters.sortBy }
-                    onChange={ ( e ) => {
-                        if ( e.target.value === 'date' ) {
-                            this.props.dispatch( sortByDate() );
-                        }
-                        else if ( e.target.value === 'amount' ) {
-                            this.props.dispatch( sortByAmount() );
-                        }
-                    } } 
+                    onChange={ this.onSortChange } 
                 >
                     <option value="date">Date</option>
                     <option value="amount">Amount</option>
                 </select>
-                <DateRangePicker 
+                <DateRangePicker
                     startDate     ={ this.props.filters.startDate }
                     endDate       ={ this.props.filters.endDate }
                     onDatesChange ={ this.onDatesChange }
-                    focusedInput  ={ this.state.calenderFocused }
+                    focusedInput  ={ this.state.calendarFocused }
                     onFocusChange ={ this.onFocusChange }
                     showClearDates={ true }
                     numberOfMonths={ 1 }
@@ -223,9 +294,38 @@ const mapStateToProps = ( state ) => {
     };
 };
 
+
+// -- Mark 6 --
+// lecture 126: Testing ExpenseListFilters
+// we will take in a dispatch argument and then implicitly return an object
+const mapDispatchToProps = ( dispatch ) => ( {
+    // inside this object, we will be defining 5 things: setStartDate, setEndDate, setTextFilter
+    // sortByDate and sortByAmount and we would rather define these here rather than in the
+    // component and it makes testing the component easier
+    // below we will pass in a value and we will call that value text and then we will
+    // pass it through to the action generator or setTextFilter() and remember we are returning
+    // " dispatch( setTextFilter( text ) ) " when we call this.props.setTextFilter( text )
+    // above
+    setTextFilter : ( text ) => dispatch( setTextFilter( text ) ),
+    // no value needed for sortByDate
+    sortByDate    : () => dispatch( sortByDate() ),
+    // no value needed for sortByAmount
+    sortByAmount  : () => dispatch( sortByAmount() ),
+    // we do need to pass in a value and we can call it anything we like and we will call it
+    // startDate and pass it through to the setStartDate action generator 
+    setStartDate  : ( startDate ) => dispatch( setStartDate( startDate ) ),
+    setEndDate    : ( endDate ) => dispatch( setEndDate( endDate ) )
+    // now that we have all the props set up we can insert mapDispatchToProps as the second
+    // argument to connect() down below and now we can tweak all the code above related to
+    // the 5 props above
+} );
+// GO TO -- Mark 7 -- Continue above
+// END OF -- Mark 6 --
+
+
 // this gets exported to the ExpenseDashboardPage.js component, which includes
 // the <ExpenseListFilters /> component within the ExpenseDashboardPage.js component
-export default connect( mapStateToProps )( ExpenseListFilters )
+export default connect( mapStateToProps, mapDispatchToProps )( ExpenseListFilters )
 
 
 // go to -- Mark 3 --

@@ -79,8 +79,12 @@ export default ( state = filtersReducerDefaultState, action ) => {
 
                 // the result is we will have a new object with the sortBy value changing
                 // from " date " to " amount "
+
+                // fast forward to lecture 116, my test case in Jest for sortBy amount was
+                // failing so I changed " sortBy : action.amount " to " sortBy : 'amount' "
+                // and that fixed the problem
                 ...state,    
-                sortBy : action.amount
+                sortBy : 'amount'
             };
 
         case 'SORT_BY_DATE':

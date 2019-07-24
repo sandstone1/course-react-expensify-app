@@ -24,7 +24,7 @@ import React from 'react';
 // -- Mark 3 --
 // lecture 108: Wiring up Edit Expense
 // import the named export Link
-import {          Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // -----------
 
 // -- Mark 5 --
@@ -157,7 +157,7 @@ const ExpenseListItem = ( props ) => (
 // -- Mark 4 -- from EditExpensePage
 // remove the connect function
 // ------------
-export default ExpenseListItem
+export default ExpenseListItem;
 
 // -----------
 

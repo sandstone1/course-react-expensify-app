@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 // BEGINNING OF -- Mark 5 --
 import ExpenseListItem from './ExpenseListItem';
-import SelectExpenses from '../selectors/expenses';
+import getVisibleExpenses from '../selectors/expenses';
 
 // change { props.expenses.length } below to { props.expenses.map }
 
@@ -27,18 +27,55 @@ import SelectExpenses from '../selectors/expenses';
 // below we are using the spread operator to spread out all
 // the properties we are using or all the properties in the individual expense,
 // which includes description, amount, createdAt, note and id
-const ExpenseList = ( props ) => (
+// and using the spread operator below or { ...expense } allows us to use destructuring
+// in the component argument in the ExpenseListItem.js file
+
+// -- Mark 6 --
+// lecture 120: Snapshot Testing with Dynamic Components
+// we need to test the unconnected version of the ExpenseList component so were going to
+// need to export the below component or change " const ExpenseList = ( props ) => ( "
+// to " export const ExpenseList = ( props ) => ( " and now we have 2 components being exported
+// from this file ( the unconnected one below and the connected one located at the bottom of this
+// file ) and the unconnected one will be used in our test cases and the connected one is used in
+// the app itself and now what we are going to do is import the unconnected component and do some
+// sanpshot testing and passing data in to make sure it works as expected
+
+// END OF -- Mark 6 --
+// --------------------------------------------------------------
+// -- GO TO EXPENSELIST.TEST.JS -- MARK 1
+
+
+// -- Mark 7 --
+// lecture 120: Snapshot Testing with Dynamic Components
+// we deleted " <h1>Expense List</h1> " the h1 tag below
+export const ExpenseList = ( props ) => (
+    // set up some conditional rendering below the <div> tag using the ternary operator
     <div>
-        <h1>Expense List</h1>
-        { props.expenses.map( ( expense ) => {
-            return  <ExpenseListItem key={ expense.id } { ...expense } />
-        }) }
+        {
+            props.expenses.length === 0 ? (
+                <p>No expenses</p>
+            ) :
+            (
+                props.expenses.map( ( expense ) => {
+                    return  <ExpenseListItem key={ expense.id } { ...expense } />
+                })             
+            )
+        }
     </div>
 );
+
+// now if we rerun the test suite we see the above test case is still passing and why is it still
+// passing? because the rendered output is still the same and now let's add a snapshot for when
+// there are no items or when the expenses array is empty and make sure that works as expected
+// END OF -- Mark 7 --
+// --------------------------------------------------------------
+// -- GO TO EXPENSELIST.TEST.JS -- MARK 2
 
 
 // could have done it this way instead of the way above
 // ** way #2 **
+// way #2 below works with way #2 in the ExpenseListItem.js file but does not work properly
+// with way #1 in ExpenseListItem.js
 /*
 const ExpenseList = ( props ) => (
     <div>
@@ -53,12 +90,15 @@ const ExpenseList = ( props ) => (
 // to wrap this video up, we want to implement our selector
 
 // change mapStateToProps
-// we will call selectExpenses() and the return value is what we will
+// we will call getVisibleExpenses() and the return value is what we will
 // show to the screen
 const mapStateToProps = ( state ) => {
     // this results in " water bill2 "
+    // remember, getVisibleExpenses() returns an expenses array and inside the array we have 
+    // expense objects and these expense objects are the ones that passed the filtering tests
+    // that were ran in the getVisibleExpenses function
     return {
-        expenses : SelectExpenses( state.expenses, state.filters )
+        expenses : getVisibleExpenses( state.expenses, state.filters )
     };
 };
 

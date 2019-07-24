@@ -19,6 +19,12 @@ import getVisibleExpenses from './selectors/expenses';
 import 'normalize.css/normalize.css';
 // import our style file into app.js
 import './styles/styles.scss';
+// lecture 121: Mocking Libraries with Jest
+// we moved the import below from ExpenseForm.js to this file
+// import the css for the react-dates library
+import 'react-dates/lib/css/_datepicker.css';
+
+
 
 
 // now we can create a const called store and then call confirgureStore()
