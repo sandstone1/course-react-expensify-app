@@ -14,7 +14,7 @@ import expenses from '../fixtures/expenses';
 // -- Mark 8 --
 // lecture 125: Testing EditExpensePage
 // need to change the " onSubmit " property below to " addExpense "
-let addExpenseSpy, historySpy, wrapper;
+let startAddExpenseSpy, historySpy, wrapper;
 // now the goal is define the 3 let variables above and we want to define fresh copies before
 // every single test case so that each test case starts with spies that haven't been called
 // and a wrapper variable that is what it should be when it first gets rendered and to do this
@@ -59,10 +59,10 @@ test( 'should handle onSubmit', () => {
 // TEST CASE #1
 test( 'should render AddExpensePage correctly', () => {
     // render the component using shallow() but remember we have 2 props we need to pass in
-    // and those 2 props are addExpense and history and we can put anything we want inside the {}
-    // and we will use some spies and insert the spies inside the {}
+    // and those 2 props are startAddExpense and history and we can put anything we want inside the
+    // {} and we will use some spies and insert the spies inside the {}
     // set up our 2 spies
-    const addExpenseSpy = jest.fn();
+    const startAddExpenseSpy = jest.fn();
     // our history spy will equal an object and the code in the AddExpensePage component is
     // " this.props.history.push( '/' ); " and on that object we are going to define " push "
     // so history.push will equal a Jest function 
@@ -71,7 +71,7 @@ test( 'should render AddExpensePage correctly', () => {
     // -- Mark 8 --
     // lecture 125: Testing EditExpensePage
     // need to change the " onSubmit " property below to " addExpense "
-    const wrapper = shallow( <AddExpensePage addExpense={ addExpenseSpy } history={ historySpy } /> );
+    const wrapper = shallow( <AddExpensePage startAddExpense={ startAddExpenseSpy } history={ historySpy } /> );
     // END OF -- Mark 8 --
 
     // now let's take a snapshot and call it a day
@@ -87,10 +87,10 @@ test( 'should render AddExpensePage correctly', () => {
 // TEST CASE #2
 test( 'should handle onSubmit', () => {
     // render the component using shallow() but remember we have 2 props we need to pass in
-    // and those 2 props are addExpense and history and we can put anything we want inside the {}
-    // and we will use some spies and insert the spies inside the {}
+    // and those 2 props are startAddExpense and history and we can put anything we want inside the
+    // {} and we will use some spies and insert the spies inside the {}
     // set up our 2 spies
-    const addExpenseSpy = jest.fn();
+    const startAddExpenseSpy = jest.fn();
     // our history spy will equal an object and the code in the AddExpensePage component is
     // " this.props.history.push( '/' ); " and on that object we are going to define " push "
     // so history.push will equal a Jest function 
@@ -99,7 +99,7 @@ test( 'should handle onSubmit', () => {
     // -- Mark 8 --
     // lecture 125: Testing EditExpensePage
     // need to change the " onSubmit " property below to " addExpense "
-    const wrapper = shallow( <AddExpensePage addExpense={ addExpenseSpy } history={ historySpy } /> );
+    const wrapper = shallow( <AddExpensePage startAddExpense={ startAddExpenseSpy } history={ historySpy } /> );
 
     // now what we are going to do is call the obSubmit function which gets passed into the
     // ExpenseForm component ( see below )
@@ -125,8 +125,8 @@ test( 'should handle onSubmit', () => {
     // so now we can make some assertions, checking that both of our spies were called with the
     // correct information and we will start with historySpy.push, which is a spy
     expect( historySpy.push ).toHaveBeenLastCalledWith( '/' );
-    // next we will move on to the other assertion, which will be for addExpense
-    expect( addExpenseSpy ).toHaveBeenLastCalledWith( expenses[ 1 ] );
+    // next we will move on to the other assertion, which will be for startAddExpense
+    expect( startAddExpenseSpy ).toHaveBeenLastCalledWith( expenses[ 1 ] );
     // END OF -- Mark 8 --
 } );
 

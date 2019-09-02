@@ -7,7 +7,7 @@ import ExpenseForm from './ExpenseForm';
 // -- Mark 5 --
 import { connect } from 'react-redux';
 // -- Mark 5 --
-import { addExpense } from '../actions/expenses';
+import { startAddExpense } from '../actions/expenses';
 
 
 // -- MARK 2 --
@@ -96,7 +96,7 @@ export class AddExpensePage extends React.Component {
         // lecture 125: Testing EditExpensePage
         // need to change the " onSubmit " property below to " addExpense "
         // GO TO -- Mark 3 -- in AddExpensePage.test.js
-        this.props.addExpense( expense );
+        this.props.startAddExpense( expense );
         this.props.history.push( '/' );
         // END OF -- Mark 8 --
     }
@@ -182,7 +182,7 @@ const ExpenseDashBoardPage = () => {
 // need to change the " onSubmit " property below to " addExpense " or we need to set the
 // property equal to the name of the action generator or addExpense
 const mapDispatchToProps = ( dispatch ) => ( {
-    addExpense : ( expense ) => dispatch( addExpense( expense ) )
+    startAddExpense : ( expense ) => dispatch( startAddExpense( expense ) )
 } );
 // END OF -- Mark 8 --
 

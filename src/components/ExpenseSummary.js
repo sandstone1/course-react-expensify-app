@@ -36,9 +36,6 @@ const mapStateToProps = ( state ) => {
     const visibleExpenses = selectExpenses( state.expenses, state.filters );
 
     // we will return our props: expenseCount and expenseTotal
-    // could have done the following below:
-    // " expenseTotal : selectExpensesTotal( visibleExpenses ) " instead pf
-    // " expenseTotal : selectExpensesTotal( state.expenses ) "
     return {
         expenseCount : visibleExpenses.length,
         expenseTotal : selectExpensesTotal( visibleExpenses )

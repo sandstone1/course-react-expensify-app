@@ -37,6 +37,89 @@ const path = require( 'path' );
 const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 // -----------
 
+// -- Mark 5 --
+// lecture 155: Creating a Separate Test Database
+const webpack = require( 'webpack' );
+// -----------
+
+// -- Mark 4 --
+// lecture 155: Creating a Separate Test Database
+// " process.env.NODE_ENV " is an environment variable that stores the environment you are
+// currently in and this gets automatically set for us on Heroku and
+// below we access " process.env.NODE_ENV " and set it equal to itself or if it doesn't exist I'm
+// going to set it equal to the string " development " so " process.env.NODE_ENV " will equal
+// " production " on Heroku and " process.env.NODE_ENV " will equal " test " in the test
+// environment and if it is neither of those then we know were in development mode and we will use
+// that value or the value " development "
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+
+// so now that we have access to " process.env.NODE_ENV " we can do some environment specific
+// stuff, for example, if " process.env.NODE_ENV " is strictly equal to " test " we can set up
+// our code to set up our test environment variables, including accessing to the test Firebase
+// database
+if ( process.env.NODE_ENV === 'test' ) {
+    
+    // -- Mark 5 --
+    // lecture 155: Creating a Separate Test Database
+    // this is a simple npm module that helps us read and set up the environemnt variables in this
+    // webpack.config file and we can install this module but first go look at the documentation
+    // and search for npm dotenv and dotenv just reads our environment files and then sets up
+    // process.env.ALL_THE_VALUES_WE_NEED and from GitHub: " Loads environment variables from
+    // .env for nodejs projects. Dotenv is a zero-dependency module that loads environment
+    // variables from a .env file into process.env. "
+
+    // first we need to install this module
+    // #33
+    // npm dotenv: I USED NPM HERE INSTEAD OF YARN and in the terminal and I typed
+    // "npm install --dev dotenv@4.0.0" but could have typed "yarn add --dev dotenv@4.0.0"
+    // lecture 155: Creating a Separate Test Database
+
+    // once we add this dependency. we will use it in a few places and the first places are right
+    // here inside our if or else if statements and we want to run this code if and only if we are
+    // in one of these environments and all we have to do to use dotenv is to call config() so we
+    // type: " require( 'dotenv' ).config " and require( dotenv ) returns an object with a config
+    // method and within the config method we have to pass in our options object and for the
+    // testing environment that would be " path : '.env.test' " and do the same thing below in
+    // our if else statement but switch from .env.test to .env.development
+
+    // now all of those file variables are going to get read and they are going to get set on
+    // process.env and this is a good first step but there is still a problem and that is that
+    // our node environment variables, the ones that exist in our webpack.config file do not get
+    // passed down to the client side JavaScript and if they did it would create a ton of security
+    // concerns so instead we need to manually pass the node environment variables through and
+    // there are 6 node environment variables meaning we need to pass 6 values down to our client
+    // side JavaScript and our client side JavaScript is contained in bundle.js and we will get
+    // this done by using a built in webpack plugin
+    // -- go to Mark 5 below --
+
+    require( 'dotenv' ).config( { path : '.env.test' } );
+
+}
+// else if process.env.NODE_ENV === 'development' then we can go ahead and set up those environment
+// variables for the development database and remember, we are not going to put the values inside
+// the curly braces {} instead what we are going to do is create 2 separate files, one for testing
+// and one for development and these 2 files will be excluded from the GIT repository and we will
+// read those files in within the curly braces {} so let's first make these 2 files and they will
+// live in the root of the project and the first file will be called .env.test and this is where
+// we will set up those test environment variables and this file will contain all the values
+// Firebase needs for testing and the second file will be called .env.development and remember
+// the Heroku environment variables will be set via the Heroku command line interface later so
+// were not going to have a production file and since it's not going to be committed to the GIT
+// repository Heroku would not have access to it anyway
+
+// ==============================
+// GO TO .ENV.DEVELOPMENT
+// ==============================
+
+else if ( process.env.NODE_ENV === 'development' ) {
+
+    require( 'dotenv' ).config( { path : '.env.development' } );
+
+}
+
+// -----------
+
 
 
 // -- Mark 1 --
@@ -179,7 +262,48 @@ module.exports = ( env ) => {
         // Step 3: pass CSSExtract into the plugins array and all we have to do is pass in the CSSExtract value
         // will need to create the plugin array
         plugins : [
-            CSSExtract
+            CSSExtract,
+
+            // -- Mark 5 -- continue from above
+            // lecture 155: Creating a Separate Test Database
+            // right here, we type " new webpack.DefinePlugin() " and this let's us pass in an object
+            // and on that object we can define the variables that we want to pass down; however, to use
+            // this we need to require " webpack " above or type " const webpack = require( 'webpack' ); "
+            // and we need to require the module we installed a long time ago or require " webpack " and
+            // now we have access to the built in define plugin below 
+
+            // using this plugin can be a little tricky and what we need to do is provide the thing were
+            // trying to define below inside of quotes and we are tring to define
+            // " 'process.env.FIREBASE_API_KEY' " and this is the variable that were going to use to set
+            // our client side JavaScript and were going to set its value to the same variable but in
+            // the node environment but this alone is not going to work or this alone will not work: 
+            // " 'process.env.FIREBASE_API_KEY' : 'process.env.FIREBASE_API_KEY' " because of how the
+            // DefinePlugin works but it will work if we place the value or 'process.env.FIREBASE_API_KEY'
+            // inside double quotes or "" because this would then be considered a valid string and we
+            // can use JSON.stringify since JSON.stringify will automatically add the double quotes to
+            // 'process.env.FIREBASE_API_KEY' so this will work:
+            // " 'process.env.FIREBASE_API_KEY' : JSON.stringify( process.env.FIREBASE_API_KEY ) " and
+            // now that we have it done once we need to do it 6 more times
+            new webpack.DefinePlugin( {
+                'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY),
+                'process.env.FIREBASE_AUTH_DOMAIN': JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
+                'process.env.FIREBASE_DATABASE_URL': JSON.stringify(process.env.FIREBASE_DATABASE_URL),
+                'process.env.FIREBASE_PROJECT_ID': JSON.stringify(process.env.FIREBASE_PROJECT_ID),
+                'process.env.FIREBASE_STORAGE_BUCKET': JSON.stringify(process.env.FIREBASE_STORAGE_BUCKET),
+                'process.env.FIREBASE_MESSAGING_SENDER_ID': JSON.stringify(process.env.FIREBASE_MESSAGING_SENDER_ID),
+                'process.env.FIREBASE_APP_ID': JSON.stringify(process.env.FIREBASE_APP_ID)
+            } )
+
+            // so at this point, we are correctly passing down those values but were not quite done because
+            // we are not using these values and go to the firebas/firebase.js file -- Note 10 --
+
+            // ==============================
+            // GO TO FIREBASE/FIREBASE - NOTES ONLY PERTAIN TO Mark 10
+            // ==============================
+
+            // -----------
+
+
         ],
         // now, we will be able to successfully extract the styles into their own file
 

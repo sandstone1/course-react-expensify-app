@@ -23,6 +23,10 @@ import './styles/styles.scss';
 // we moved the import below from ExpenseForm.js to this file
 // import the css for the react-dates library
 import 'react-dates/lib/css/_datepicker.css';
+// import our firebase file into app.js
+import './firebase/firebase';
+
+
 
 
 
