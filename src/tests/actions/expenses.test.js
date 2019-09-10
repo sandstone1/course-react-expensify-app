@@ -6,7 +6,12 @@
 // -- Mark 1 --
 // lecture 153: Testing Async Redux Actions: Part 1
 // add the named export startAddExpense below
-import { startAddExpense, addExpense, removeExpense, editExpense } from '../../actions/expenses';
+import { startAddExpense,
+         addExpense,
+         removeExpense,
+         editExpense,
+         setExpenses,
+         startSetExpenses } from '../../actions/expenses';
 // import the expense fixture data
 import expenses from '../fixtures/expenses';
 // import in our mock store functionality
@@ -17,6 +22,111 @@ import thunk from 'redux-thunk';
 import database from '../../firebase/firebase';
 // End of -- Mark 1 -- 
 // Continue to -- Mark 1 -- Below
+
+
+// -- Mark 4 --
+// lecture 157: Fetching Expenses: Part 1
+// first, we will use the lifecycle method beforeEach() and all were going to do is write some data
+// to Firebase 
+beforeEach( ( done ) => {
+    // create the expenses variable that we will use inside set() below
+    const expenseData = {};
+    // loop over the expenses array in the the fixtures/expense.js and add each expense item
+    // into the expenseData object and from there we can set up each expense item in the correct
+    // format so that it works with Firebase and within the arrow function argument below we want
+    // to destructure id, description, note, amount and createdAt or in other words we want to
+    // pull these values off each expense item in the expenses array and the values are represented
+    // below by the keys listed in the argument below and then we want to format these
+    // values so they fit the Firebase format and what are we trying to do here? were trying
+    // to set an object equal to the id and the id acts as the index for each object
+    expenses.forEach( ( { id, description, note, amount, createdAt } ) => {
+
+        expenseData[ id ] = { description, note, amount, createdAt };
+        // could have done this instead and the below is equal to the above line of code
+        // expenseData[ id ] = { description : description, note : note, amount : amount, 
+        // createdAt : createdAt };
+
+    } );
+
+    // now, we will set some data on Firebase
+    // now, we do have one probem and that is beforeEach() is not going to wait for
+    // " database.ref( 'expenses' ).set( expensesData ); " to complete before it allows
+    // the test cases below to run which means that some test cases might actually run
+    // before the data gets saved to the Firebase database and to solve this problem we can once
+    // again use " done() " and remember to include done in the argument up above and we will add
+    // a then() call to " database.ref( 'expenses' ).set( expensesData ); " so that once this
+    // completes or once data is added to the database then we will run a callback function inside
+    // the then() call and that callback function will just include done(); and after done() runs
+    // then the test cases below will run
+    database.ref( 'expenses' ).set( expenseData ).then( () => {
+        done();
+    } );
+} )
+
+// now we can view this in real time and go to the terminal and run the test suite then go to
+// Firebase and view the test database and beforeEach() will wipe the database clean with each
+// test case so what we see in the test database is one expense for test case #6 below
+
+// after running beforeEach() above, we end up with the following expense data in the test
+// database:
+/*
+expenses
+    1
+        amount: 195
+        createdAt: 0
+        description: "Gum"
+        note: ""
+    2
+        amount: 109500
+        createdAt: -345600000
+        description: "Rent"
+        note: ""
+    3
+        amount: 4500
+        createdAt: 345600000
+        description: "Credit Card"
+        note: ""
+    -Lo3FLcAS8cufzbrmt2H
+        amount: 0
+        createdAt: 0
+        description: ""
+        note: ""
+*/
+
+// if we remove done() from the callback above, we end up with the following expense data in the
+// test database:
+/*
+expenses
+    1
+        amount: 195
+        createdAt: 0
+        description: "Gum"
+        note: ""
+    2
+        amount: 109500
+        createdAt: -345600000
+        description: "Rent"
+        note: ""
+    3
+        amount: 4500
+        createdAt: 345600000
+        description: "Credit Card"
+        note: ""
+*/
+
+// so now that we have this in place and we have some dummy data set up, now we can move
+// on to use this dummy data to test a real feature
+
+
+
+// ==============================
+// GO TO SRC/ACTIONS/EXPENSES.JS -- GO TO -- Mark 2 --
+// ==============================
+
+
+
+// End of -- Mark 4 -- 
+
 
 
 
@@ -488,7 +598,6 @@ test( 'should add expense with defaults to the database and store', ( done ) => 
 
 
 
-
 // comment out test case #4
 
 /*
@@ -524,3 +633,136 @@ test( 'set up add expense action object with default values', () => {
 // and we learned about expect.any() which is a way to assert the type as it relates to a property
 // and we use this when we don't know what the value will be and this worked great for our id
 // property above which has a value that changes every single time we call addExpense
+
+
+
+
+// -- Mark 5 --
+// lecture 157: Fetching Expenses: Part 1
+
+// TEST CASE #7 - setExpenses
+test( 'should setup set expense action object with data', () => {
+
+    // this test case will not be asynchronous and for this one will simply call the setExpenses
+    // export and then look at what comes back and remember to import the setExpenses action
+    // generator up above and we will pass in all the expenses data from our fixtures/expenses.js
+    // file
+    const actionResult = setExpenses( expenses );
+
+    // so what would we expect on this object?
+    // we would expect a type property equal to 'SET_EXPENSES' and an id equal
+    // to '123abc'
+    // now, toBe() will not work for this code because when we use triple equals ( === )
+    // to compare 2 objects we will never find that the two objects are strictly equal
+    // for example, if we go into the counsel and check if {} === {} we will see that
+    // it always results to false and the same thing is true for an array [] === []
+    // so what we need to do is check the properties / values on the object and see if
+    // they are all equal and the Jest assertion library does support this and we will
+    // use the toEqual() method instead and toEqual() will go over your array or object
+    // and assert that the properties / values are all the same
+
+    // so when we using objects or arrays then we want to use toEqual() but if were using
+    // booleans, numbers or strings then we want to use toBe()
+    expect( actionResult ).toEqual( {
+        type     : 'SET_EXPENSES',
+        expenses : expenses
+    } );
+
+} );
+
+// now if we go to the test sute in the terminal, we see that all test cases are passing so test
+// case #7 passes as well
+
+
+// now that we have our action ( i.e. setExpenses ) and our action test case ( i.e. test case #7 )
+// in place, it is now time to handle this the setExpenses action generator in the reducer or the
+// tests/reducers/expenses.test.js file and we will have to 
+
+// (1) set support for setExpenses inside our expenses reducer or src/reducers/expenses.js and
+
+// (2) then we will create a new test case inside our expenses test reducer or the
+// tests/reducers/expenses.test.js file
+
+
+// ==============================
+// GO TO SRC/REDUCERS/EXPENSES.JS -- GO TO -- Mark 1 --
+// ==============================
+
+
+// ==============================
+// GO TO TESTS/REDUCERS/EXPENSES.TEST.JS -- GO TO -- Mark 1 --
+// ==============================
+
+
+
+// End of -- Mark 5 --
+
+
+
+// -- Mark 6 --
+// lecture 158: Fetching Expenses: Part II
+
+
+
+// TEST CASE #8 - startSetExpenses
+test( 'should fetch the expenses from Firebase', ( done ) => {
+
+    // like the other test cases that use asynchronous functionality, we need to create a mock
+    // store and then go through the process of making the request and then assert something
+    // about one of the actions that were dispatched and we do expect the Firebase database to
+    // change at all so there is no need to query the database inside the test case or no need
+    // to do ( see test #5 above ):
+    /*
+            return database.ref( `expenses/${ actions[ 0 ].expense.id }` ).once( 'value' );
+
+        }).then( ( snapshot ) => {
+
+            expect( snapshot.val() ).toEqual( expenseData );
+            done();
+
+        } );
+    */
+
+    // STEP 1: create the mock store and we will pass to it the default data and in the case
+    // below we will just provide an empty object
+    const store = createMockStore( {} );
+
+    // remember, to import startSetExpenses above
+
+    // now let's dispatch startSetExpenses on our mock store and since we are creating an
+    // asynchronous test case, we will provide " done " above as the argument to the arrow
+    // function and this will let Jest know not to consider this test a success or failure
+    // until done() is called 
+    store.dispatch( startSetExpenses() ).then( () => {
+
+        // we will start by getting the actions
+        const actions = store.getActions();
+
+        // we will get all the actions back and we can take a look at them and there should only
+        // be one and that is the only one we care about and we will expeect actions[ 0 ] to
+        // equal some object and what are we going to expect?
+        // we are going to expect type to equal " SET_EXPENSES " and expenses to equal
+        // " expenses " and " expenses " represents all out fixtures data from fixtures/expenses.js
+        // since we set that data in beforeEach() above and if everything went well it should
+        // have dispatched the setExpenses action generator with the expense data it found in
+        // Firebase 
+        expect( actions[ 0 ] ).toEqual( {
+            type     : 'SET_EXPENSES',
+            expenses : expenses
+        } );
+
+        // remember to call done();
+        done();
+
+    } );
+
+} );
+
+
+// now, go to the terminal and run the test suite and see if test case #8 passes and we see
+// this test case is passing
+
+
+// End of -- Mark 6 --
+
+

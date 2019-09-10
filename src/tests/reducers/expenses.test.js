@@ -242,3 +242,41 @@ test( 'should not edit an expense if id not found', () => {
 
 
 
+
+// -- Mark 1 --
+// lecture 157: Fetching Expenses: Part 1
+
+// the test case below will make sure setExpenses actually works and what we will need to do
+// is dispatch an action just like we've done for all the other test cases and at the end
+// of the day we should expect all the expenses we passed in to be inside of the state and you
+// expect any that might exist to be gone  
+
+// TEST CASE #7
+test( 'should set expenses', () => {
+    // define my action object  
+    const action = {
+        type     : 'SET_EXPENSES',
+        // need to set expenses equal to an array
+        expenses : [ expenses[ 1 ] ]
+    };
+
+
+    // now we need to pass the above action object into the reducer
+    const state = expensesReducer( expenses, action );
+
+    // and remember, although we started off with all of our expenses or " expenses " in the
+    // expensesReducer above, we expect that what will come back will be an array with the
+    // expenses[ 1 ] object inside the array and this follows the same structure as our expenses
+    // data inside the tests/fixtures/expenses.js file
+    expect( state ).toEqual( [ expenses[ 1 ] ] );
+} );
+
+// now if we go to the terminal and view our test suite, we see this test case is passing
+
+// next, we need to set up our asynchronous action or the one that goes off and fetches data
+// from Firebase and once we have our asynchronous action in place we have to use it somewhere
+// in our application or it will never run and this is what we are going to get done in the
+// next video
+
+// End of -- Mark 1 --
+

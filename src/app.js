@@ -9,7 +9,7 @@ import AppRouter from './routers/AppRouter';
 // import out store
 import configureStore from './store/configureStore';
 // import the named export
-import { addExpense } from './actions/expenses';
+import { startSetExpenses } from './actions/expenses';
 // import the named export
 import { setTextFilter } from './actions/filters';
 // import the default export getVisibleExpenses
@@ -36,8 +36,6 @@ import './firebase/firebase';
 // this will give us access to store.dispatch(), store.getState() and
 // store.subscribe()
 const store = configureStore();
-
-
 
 /*
 // lecture 99: Challange
@@ -192,11 +190,45 @@ const jsx = (
 );
 
 
-ReactDOM.render( jsx, document.getElementById( 'app' ) );
 
-// create a new component called expenseList.js under the Component's
-// folder
+// -- Mark 6 --
+// lecture 158: Fetching Expenses: Part II
+
+// first, let take this line " ReactDOM.render( jsx, document.getElementById( 'app' ) ); "
+// and copy it and what we are going to do is render a loading message to the screen until we
+// get the data from Firebase and then we'll render the application so initially we will have
+// this loading paragraph showing up to the screen and then at some point later on we will run
+// " ReactDOM.render( jsx, document.getElementById( 'app' ) ); "
+// ReactDOM.render( <p>Loading ...</p>, document.getElementById( 'app' ) );
+
+// and in order to figure out when the expenses are actually fetched we will use store.dispatch()
+// and we will dispatch the action we just imported or startSetExpenses and startSetExpenses is not
+// going to take any arguments and it is going to return a promise so we can include then() and
+// inside then() will be our success case and our success case will be rendering the application
+// and we do that by taking this line " ReactDOM.render( jsx, document.getElementById( 'app' ) ); "
+// pasting it inside then() so to make the below work we need to create the startSetExpenses
+// function in the src/actions/expenses.js file
+store.dispatch( startSetExpenses() ).then( () => {
+
+    ReactDOM.render( jsx, document.getElementById( 'app' ) );
+
+    // TEST
+    console.log( store.getState() );
+
+} );
+
+
+// ==============================
+// GO TO SRC/ACTIONS/EXPENSES.JS -- GO TO -- Mark 3 --
+// ==============================
+
+
+// End of -- Mark 6 --
+
+
+// create a new component called expenseList.js under the Component's folder
 
 // ==============================
 // GO TO EXPENSELIST.JS -- Mark 2 --
 // ==============================
+

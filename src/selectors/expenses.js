@@ -30,6 +30,7 @@ import moment from 'moment';
 
 // change filters to text, sortBy, startDate, endDate
 export default ( expenses, { text, sortBy, startDate, endDate } ) => {
+    
     // use filter to
     // filter creates a brand new array from another array and does this by looking at
     // each item in the array and will call a function once for each item in the array

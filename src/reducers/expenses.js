@@ -96,6 +96,19 @@ export default ( state = expensesReducerDefaultState, action ) => {
                 }
             } );
 
+        // -- Mark 1 --
+        // lecture 157: Fetching Expenses: Part 1
+        case 'SET_EXPENSES':
+
+            // all we need to do is return action.expenses and we are accounting for whatever
+            // is in the state and we do not care about the previous expenses and this case
+            // is designed to set the expenses array completely and now let's go to the
+            // tests/reducers/expenses.test.js file and set the test case
+            return action.expenses;
+
+        // End of -- Mark 1 --
+
+
         // set up the default case
         default :
             // if the store is running for the first time, then the default state value
@@ -103,5 +116,3 @@ export default ( state = expensesReducerDefaultState, action ) => {
             return state;
     }
 };
-
-
