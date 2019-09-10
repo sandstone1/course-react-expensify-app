@@ -1,5 +1,7 @@
 node_modules/
 src/playground/app.js
+src/firebase/firebase-copy-v1.js
+src/firebase/firebase-copy-v2.js
 public/dist/
 .env.test
 .env.development
