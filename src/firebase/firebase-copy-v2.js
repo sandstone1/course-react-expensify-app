@@ -1328,7 +1328,7 @@ database.ref( 'expenses' ).push( {
 // we are going to export Firebase and the database variable so anyone who wants to take
 // advantage of Firebase can just import the named export below and grab Firebase if they need it
 // or grab the database variable if they need it
-export { firebase, database as default };
+// export { firebase, database as default };
 
 // so that is it for configureStore.js and firebase.js and now we want to focus on adding in
 // something new in action/expenses.js

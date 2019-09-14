@@ -6,24 +6,23 @@ import { EditExpensePage } from '../../components/EditExpensePage';
 import expenses from '../fixtures/expenses';
 
 
-
 // TEST CASE #1
 test( 'should render EditExpensePage correctly', () => {
 
     // set up all of our spies
-    const editExpenseSpy   = jest.fn();
-    const historySpy       = { push : jest.fn() };
-    const removeExpenseSpy = jest.fn();
+    const editExpenseSpy        = jest.fn();
+    const historySpy            = { push : jest.fn() };
+    const startRemoveExpenseSpy = jest.fn();
 
     // remember, since were working with the EditExpensePage component, we need to pass
     // in an expense so we can do a real test and let's use one of our fixture expenses and
     // now we have our component rendered
     const wrapper = shallow(
         <EditExpensePage
-            editExpense   = {   editExpenseSpy }
-            history       = {       historySpy }
-            removeExpense = { removeExpenseSpy }
-            expense       = {    expenses[ 2 ] }
+            editExpense        = {        editExpenseSpy }
+            history            = {            historySpy }
+            startRemoveExpense = { startRemoveExpenseSpy }
+            expense            = {         expenses[ 2 ] }
         /> 
     );
 
@@ -39,19 +38,19 @@ test( 'should render EditExpensePage correctly', () => {
 test( 'should handle editExpense', () => {
 
     // set up all of our spies
-    const editExpenseSpy   = jest.fn();
-    const historySpy       = { push : jest.fn() };
-    const removeExpenseSpy = jest.fn();
+    const editExpenseSpy        = jest.fn();
+    const historySpy            = { push : jest.fn() };
+    const startRemoveExpenseSpy = jest.fn();
 
     // remember, since were working with the EditExpensePage component, we need to pass
     // in an expense so we can do a real test and let's use one of our fixture expenses and
     // now we have our component rendered
     const wrapper = shallow(
         <EditExpensePage
-            editExpense   = {   editExpenseSpy }
-            history       = {       historySpy }
-            removeExpense = { removeExpenseSpy }
-            expense       = {    expenses[ 2 ] }
+            editExpense        = {        editExpenseSpy }
+            history            = {            historySpy }
+            startRemoveExpense = { startRemoveExpenseSpy }
+            expense            = {         expenses[ 2 ] }
         /> 
     );
 
@@ -84,22 +83,22 @@ test( 'should handle editExpense', () => {
 
 
 // TEST CASE #3
-test( 'should handle removeExpense', () => {
+test( 'should handle startRemoveExpense', () => {
 
     // set up all of our spies
-    const editExpenseSpy   = jest.fn();
-    const historySpy       = { push : jest.fn() };
-    const removeExpenseSpy = jest.fn();
+    const editExpenseSpy        = jest.fn();
+    const historySpy            = { push : jest.fn() };
+    const startRemoveExpenseSpy = jest.fn();
 
     // remember, since were working with the EditExpensePage component, we need to pass
     // in an expense so we can do a real test and let's use one of our fixture expenses and
     // now we have our component rendered
     const wrapper = shallow(
         <EditExpensePage
-            editExpense   = {   editExpenseSpy }
-            history       = {       historySpy }
-            removeExpense = { removeExpenseSpy }
-            expense       = {    expenses[ 2 ] }
+            editExpense        = {        editExpenseSpy }
+            history            = {            historySpy }
+            startRemoveExpense = { startRemoveExpenseSpy }
+            expense            = {         expenses[ 2 ] }
         /> 
     );
 
@@ -124,7 +123,7 @@ test( 'should handle removeExpense', () => {
     expect( historySpy.push ).toHaveBeenLastCalledWith( '/' );
     // next we will move on to the other assertion, which will be for removeExpense and here we
     // will make an assertion as to what the removeExpenseSpy got called with
-    expect( removeExpenseSpy ).toHaveBeenLastCalledWith( { id : expenses[ 2 ].id } );
+    expect( startRemoveExpenseSpy ).toHaveBeenLastCalledWith( { id : expenses[ 2 ].id } );
 } );
 
 // if we go to the terminal, we see that this test case is passing

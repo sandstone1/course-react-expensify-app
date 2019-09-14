@@ -45,7 +45,7 @@ export default ( state = expensesReducerDefaultState, action ) => {
             // the great thing here is the spread operator did not change the names array
             // could do [ 'Adam', ...names, 'Mike' ] and the result is [ 'Adam', Andrew', 'Steve', 'Mike' ]
             // so instead of doing this " return state.concat( action.expense ); ", were going to do
-            // return [ ...state, action.expense ]; ( so were taking the current state array and addng
+            // return [ ...state, action.expense ]; ( so were taking the current state array and adding
             // on the action.expense object without changing the state array )
             return [ ...state, action.expense ];
 

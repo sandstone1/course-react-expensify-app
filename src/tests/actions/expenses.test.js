@@ -11,7 +11,8 @@ import { startAddExpense,
          removeExpense,
          editExpense,
          setExpenses,
-         startSetExpenses } from '../../actions/expenses';
+         startSetExpenses,
+         startRemoveExpense } from '../../actions/expenses';
 // import the expense fixture data
 import expenses from '../fixtures/expenses';
 // import in our mock store functionality
@@ -765,4 +766,72 @@ test( 'should fetch the expenses from Firebase', ( done ) => {
 
 // End of -- Mark 6 --
 
+
+
+// -- Mark 7 --
+// lecture 159: Remove Expense
+
+// for this test case, we want to remove one of the dummy items we added to Firebase
+
+// TEST CASE #8 - startRemoveExpense
+// since this will an asynchronous test case, done will be the argument to the arrow function
+test( 'should remove expenses from Firebase', ( done ) => {
+
+    // like the other test cases that use asynchronous functionality, we need to create a mock
+    // store and then go through the process of making the request and then assert something
+    // about one of the actions that were dispatched
+
+    // STEP 1: create the mock store and we will pass to it the default data and in the case
+    // below we will just provide an empty object
+    const store = createMockStore( {} );
+
+    // remember, to import startRemoveExpense above
+
+    // start the dispatch process and create an ID variable
+    const id = expenses[ 2 ].id;
+
+    // now let's dispatch startRemoveExpense on our mock store and since we are creating an
+    // asynchronous test case, we will provide " done " above as the argument to the arrow
+    // function and this will let Jest know not to consider this test a success or failure
+    // until done() is called 
+    store.dispatch( startRemoveExpense( { id } ) ).then( () => {
+
+        // we will start by getting the actions
+        const actions = store.getActions();
+
+        // we will get all the actions back and we can take a look at them and there should only
+        // be one and that is the only one we care about and we will expeect actions[ 0 ] to
+        // equal some object and what are we going to expect?
+        // we are going to expect type to equal " REMOVE_EXPENSE " and expenses to equal
+        // " id : id "
+        expect( actions[ 0 ] ).toEqual( {
+            type     : 'REMOVE_EXPENSE',
+            expense : {
+                id : id
+            }
+        } );
+
+        // return fetching data from the database below so we can use then() later and we do not
+        // want to toss the then() call after .once( 'value' ) in order to avoid complex nesting
+        // so we will attech the then() call below
+        return database.ref( `expenses/${ id }` ).once( 'value' );
+
+        } ).then( ( snapshot ) => {
+
+            // use the assertion toBeFalsy below and it will make sure the assertion passes if the
+            // value is falsy and if not the assertion will throw an error and remember null is
+            // considered falsy so everything should work as expected
+            expect( snapshot.val() ).toBeFalsy();
+            // remember to call done();
+            done();
+
+        } );        
+
+} );
+
+// now, go to the terminal and see if the test suite passes and I see that all test cases are
+// passing
+
+
+// End of -- Mark 7 --
 

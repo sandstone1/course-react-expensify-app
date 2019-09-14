@@ -16,7 +16,7 @@ import NotFoundPage from '../../components/NotFoundPage';
 // TEST CASE #1
 test( 'should render NotFoundPage correctly', () => {
     const wrapper = shallow( <NotFoundPage /> );
-     expect( wrapper ).toMatchSnapshot();
+    expect( wrapper ).toMatchSnapshot();
 } );
 
 // now check the terminal to make sure that this test case passes and then check the snapshot file

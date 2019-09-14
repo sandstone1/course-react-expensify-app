@@ -329,8 +329,10 @@ store.dispatch( startSetExpenses ).then( () => {
 // ACTION GENERATOR #6
 // ==============================
 
-// the action generator below will fetch the data and then dispatch setExpenses and update the
-// redux store and startSetExpenses will be an asynchronous action 
+// the action generator below will fetch the expenses data from the Firebase database and then
+// dispatch setExpenses with the expenses data as the argument to setExpenses which will then
+// update the redux store and this will all happen before the site is rendered ( see app.js
+// for details ) and remember startSetExpenses is an asynchronous action
 
 // since we are just going to be fetching expenses the startSetExpenses argument doesn't need to
 // take any arguments in
@@ -386,3 +388,37 @@ export const startSetExpenses = () => {
 
 
 // End of -- Mark 3 --
+
+
+
+
+// -- Mark 4 --
+// lecture 159: Remove Expense
+
+
+// ==============================
+// ACTION GENERATOR #7
+// ==============================
+
+export const startRemoveExpense = ( { id } = {} ) => {
+
+    // the return function has access to dispatch and we will return a function that will do some
+    // asynchronous work and in this case communicate with Firebase and then dispatch an action to
+    // change the redux store and dispatch gets passed to the return function by the redux library
+    // 
+    return ( dispatch ) => {
+
+        // include return below since we are going to want to return a promise
+        return database.ref( `expenses/${ id }` ).remove().then( () => {
+              
+            dispatch( removeExpense( { id } ) );
+    
+        } );
+ 
+    };
+
+};
+
+
+
+// End of -- Mark 4 --

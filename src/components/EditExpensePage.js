@@ -17,7 +17,7 @@ import { editExpense } from '../actions/expenses';
 // ------------
 
 // -- Mark 7 -- from ExpenseListItem
-import { removeExpense } from '../actions/expenses';
+import { startRemoveExpense } from '../actions/expenses';
 // ------------
 
 // -- MARK 3 --
@@ -63,8 +63,8 @@ export class EditExpensePage extends React.Component {
 
     onRemove = () => {
         // change this.props.dispatch( removeExpense( id, this.props.expense.id ) );
-        // to this.props.removeExpense( id, this.props.expense.id );
-        this.props.removeExpense( { id : this.props.expense.id } );
+        // to this.props.startRemoveExpense( { id : this.props.expense.id } );
+        this.props.startRemoveExpense( { id : this.props.expense.id } );
         this.props.history.push( '/' );
     };
 
@@ -232,7 +232,7 @@ const mapDispatchToProps = ( dispatch, ownProps ) => ( {
     editExpense   : ( id, expense ) => dispatch( editExpense( id, expense ) ),
     // for remove expense, we will take the ownProps that come in and then pass the ownProps down to
     // the removeExpense() call
-    removeExpense : ( ownProps ) => dispatch( removeExpense( ownProps ) )
+    startRemoveExpense : ( ownProps ) => dispatch( startRemoveExpense( ownProps ) )
 } );
 
 
